@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vehicle-rec-system"
+version = "0.1.0"
+description = "RC drift video trajectory extraction and scoring system"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "opencv-python>=4.9",
+    "ultralytics>=8.3",
+]
+
+[project.scripts]
+vehicle-rec = "vehicle_rec_system.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
