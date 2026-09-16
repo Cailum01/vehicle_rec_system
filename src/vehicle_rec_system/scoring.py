@@ -39,8 +39,10 @@ def score_track(samples: list[dict[str, Any]], fps: float) -> dict[str, float]:
     speed_mean = mean(speeds) if speeds else 0.0
     speed_variation = pstdev(speeds) if len(speeds) > 1 else 0.0
     angle_variation = pstdev(angles) if len(angles) > 1 else 0.0
+    route_samples = [sample["in_track"] for sample in samples if "in_track" in sample]
+    route_score = WEIGHTS["route"] * (sum(route_samples) / len(route_samples)) if route_samples else WEIGHTS["route"]
     result = {
-        "route": WEIGHTS["route"],
+        "route": route_score,
         "angle": min(WEIGHTS["angle"], mean(angles) / 45.0 * WEIGHTS["angle"]) if angles else 0.0,
         "speed": min(WEIGHTS["speed"], speed_mean / 100.0 * WEIGHTS["speed"]),
         "speed_stability": max(0.0, WEIGHTS["speed_stability"] * (1.0 - speed_variation / max(speed_mean, 1.0))),

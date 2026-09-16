@@ -1,0 +1,61 @@
+繼續 vehicle_rec_system
+
+安裝並進入專案
+cd C:\Users\Local.User\vehicle_rec_system
+python -m pip install -e .
+
+標註跑道、護欄、得分區
+vehicle-rec track-label `
+  --video C:\data\track.mp4 `
+  --dataset data\track_dataset `
+  --sample-frames 10
+
+訓練跑道模型
+vehicle-rec track-train `
+  --dataset data\track_dataset `
+  --output runs\track_training `
+  --base-model yolo11n-seg.pt `
+  --epochs 100 `
+  --imgsz 640 `
+  --batch 4 `
+  --name track
+
+模型通常會在：
+runs\track_training\track\weights\best.pt
+
+標註車輛 每台車逐點描繪輪廓，完成後按 Enter，保存畫面按 N
+vehicle-rec vehicle-label `
+  --video C:\data\drift.mp4 `
+  --dataset data\vehicle_dataset `
+  --sample-frames 10
+
+訓練車輛模型
+vehicle-rec vehicle-train `
+  --dataset data\vehicle_dataset `
+  --output runs\vehicle_training `
+  --base-model yolo11n-seg.pt `
+  --epochs 100 `
+  --imgsz 640 `
+  --batch 4 `
+  --name vehicle
+
+模型通常會在：
+runs\vehicle_training\vehicle\weights\best.pt
+
+正式抽取與計分
+vehicle-rec extract `
+  --video C:\data\drift.mp4 `
+  --output runs\demo `
+  --model runs\vehicle_training\vehicle\weights\best.pt `
+  --track-model runs\track_training\track\weights\best.pt `
+  --sample-frames 5 `
+  --vehicle-class 0
+
+
+
+vehicle-rec score `
+  --trajectory runs\demo\trajectory.json `
+  --output runs\demo\score.json
+
+查看分數：
+Get-Content runs\demo\score.json

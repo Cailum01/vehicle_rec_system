@@ -40,3 +40,16 @@ vehicle-rec score --trajectory runs/demo/trajectory.json --output runs/demo/scor
 - `scoring.py`: 純資料評分，可獨立測試與調參
 - `models.py`: JSON 資料結構
 - 後續可新增 `zones.py` 與 `training.py`，不影響評分器
+
+## 使用文件
+
+- [使用教學手冊](docs/USER_MANUAL.md)：安裝、CLI 指令、參數、輸出格式、評分與故障排除
+- [系統架構介紹](docs/ARCHITECTURE.md)：模組責任、函式流程、資料流、評分公式與已知限制
+
+## 快速啟動
+
+```powershell
+vehicle-rec
+```
+
+不帶子命令啟動時會開啟互動選單，可選擇評分、訓練跑道或訓練車輛。
